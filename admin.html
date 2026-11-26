@@ -223,6 +223,13 @@ body {
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
   }
 
+  // 图片路径：数据里可能是 /assets/xxx（以站点根为准），
+  // 但本站挂在子目录下，必须去掉开头的斜杠才能找到
+  function img(p) {
+    if (!p) return ''
+    return String(p).replace(/^\//, '')
+  }
+
   function countByCategory(id) {
     return state.data.artworks.filter(function (a) { return a.categoryId === id }).length
   }
@@ -328,7 +335,7 @@ body {
 
     var list = d.artworks.map(function (a) {
       return '<div class="item">' +
-        '<img src="' + esc(a.thumb || a.cover || '') + '" alt="">' +
+        '<img src="' + esc(img(a.thumb || a.cover || a.image || '')) + '" loading="lazy" alt="">' +
         '<div class="body"><div class="name">' + esc(a.name) + '</div>' +
         '<div class="sub">' + esc(a.code) + ' · ' + esc(a.categoryName || '未分类') + ' · ' + esc(a.monthName || '') + '</div></div>' +
         '<div class="del" data-del="art" data-id="' + esc(a.id) + '">删除</div></div>'
